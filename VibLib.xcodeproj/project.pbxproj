@@ -1,0 +1,431 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		041F6D531B62E6EB00E9A804 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D361B62E63E00E9A804 /* main.cpp */; };
+		041F6D751B62E77500E9A804 /* VibDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D2F1B62E63E00E9A804 /* VibDevice.cpp */; };
+		041F6D761B62E77500E9A804 /* VibEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D311B62E63E00E9A804 /* VibEffect.cpp */; };
+		041F6D771B62E77500E9A804 /* VibLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D331B62E63E00E9A804 /* VibLib.cpp */; };
+		041F6D7B1B62E79200E9A804 /* VibDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 041F6D301B62E63E00E9A804 /* VibDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		041F6D7C1B62E79200E9A804 /* VibEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 041F6D321B62E63E00E9A804 /* VibEffect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		041F6D7D1B62E79200E9A804 /* VibLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 041F6D341B62E63E00E9A804 /* VibLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		041F6D7E1B62E7E700E9A804 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3F1B62E67300E9A804 /* IOKit.framework */; };
+		041F6D7F1B62E7E700E9A804 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */; };
+		041F6D801B62E7E700E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
+		041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D591B62E70F00E9A804 /* VibLib.framework */; };
+		041F6D851B62E91400E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		041F6D821B62E7F700E9A804 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 041F6D151B62E56500E9A804 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 041F6D581B62E70F00E9A804;
+			remoteInfo = VibLib;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		041F6D471B62E6BE00E9A804 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		041F6D2F1B62E63E00E9A804 /* VibDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VibDevice.cpp; sourceTree = "<group>"; };
+		041F6D301B62E63E00E9A804 /* VibDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VibDevice.h; sourceTree = "<group>"; };
+		041F6D311B62E63E00E9A804 /* VibEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VibEffect.cpp; sourceTree = "<group>"; };
+		041F6D321B62E63E00E9A804 /* VibEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VibEffect.h; sourceTree = "<group>"; };
+		041F6D331B62E63E00E9A804 /* VibLib.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VibLib.cpp; sourceTree = "<group>"; };
+		041F6D341B62E63E00E9A804 /* VibLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VibLib.h; sourceTree = "<group>"; };
+		041F6D361B62E63E00E9A804 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
+		041F6D3F1B62E67300E9A804 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		041F6D491B62E6BE00E9A804 /* VibLibTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VibLibTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		041F6D591B62E70F00E9A804 /* VibLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VibLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		041F6D461B62E6BE00E9A804 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */,
+				041F6D851B62E91400E9A804 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		041F6D551B62E70F00E9A804 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041F6D7E1B62E7E700E9A804 /* IOKit.framework in Frameworks */,
+				041F6D7F1B62E7E700E9A804 /* ForceFeedback.framework in Frameworks */,
+				041F6D801B62E7E700E9A804 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		041F6D141B62E56500E9A804 = {
+			isa = PBXGroup;
+			children = (
+				041F6D411B62E67D00E9A804 /* Frameworks */,
+				041F6D2E1B62E63E00E9A804 /* VibLib */,
+				041F6D351B62E63E00E9A804 /* VibLibTest */,
+				041F6D1E1B62E56500E9A804 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		041F6D1E1B62E56500E9A804 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				041F6D491B62E6BE00E9A804 /* VibLibTest */,
+				041F6D591B62E70F00E9A804 /* VibLib.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		041F6D2E1B62E63E00E9A804 /* VibLib */ = {
+			isa = PBXGroup;
+			children = (
+				041F6D2F1B62E63E00E9A804 /* VibDevice.cpp */,
+				041F6D301B62E63E00E9A804 /* VibDevice.h */,
+				041F6D311B62E63E00E9A804 /* VibEffect.cpp */,
+				041F6D321B62E63E00E9A804 /* VibEffect.h */,
+				041F6D331B62E63E00E9A804 /* VibLib.cpp */,
+				041F6D341B62E63E00E9A804 /* VibLib.h */,
+			);
+			path = VibLib;
+			sourceTree = "<group>";
+		};
+		041F6D351B62E63E00E9A804 /* VibLibTest */ = {
+			isa = PBXGroup;
+			children = (
+				041F6D361B62E63E00E9A804 /* main.cpp */,
+			);
+			path = VibLibTest;
+			sourceTree = "<group>";
+		};
+		041F6D411B62E67D00E9A804 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				041F6D3F1B62E67300E9A804 /* IOKit.framework */,
+				041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */,
+				041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		041F6D561B62E70F00E9A804 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041F6D7B1B62E79200E9A804 /* VibDevice.h in Headers */,
+				041F6D7C1B62E79200E9A804 /* VibEffect.h in Headers */,
+				041F6D7D1B62E79200E9A804 /* VibLib.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		041F6D481B62E6BE00E9A804 /* VibLibTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 041F6D4D1B62E6BE00E9A804 /* Build configuration list for PBXNativeTarget "VibLibTest" */;
+			buildPhases = (
+				041F6D451B62E6BE00E9A804 /* Sources */,
+				041F6D461B62E6BE00E9A804 /* Frameworks */,
+				041F6D471B62E6BE00E9A804 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				041F6D831B62E7F700E9A804 /* PBXTargetDependency */,
+			);
+			name = VibLibTest;
+			productName = VibLibTest;
+			productReference = 041F6D491B62E6BE00E9A804 /* VibLibTest */;
+			productType = "com.apple.product-type.tool";
+		};
+		041F6D581B62E70F00E9A804 /* VibLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 041F6D6C1B62E70F00E9A804 /* Build configuration list for PBXNativeTarget "VibLib" */;
+			buildPhases = (
+				041F6D541B62E70F00E9A804 /* Sources */,
+				041F6D551B62E70F00E9A804 /* Frameworks */,
+				041F6D561B62E70F00E9A804 /* Headers */,
+				041F6D571B62E70F00E9A804 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VibLib;
+			productName = VibLib;
+			productReference = 041F6D591B62E70F00E9A804 /* VibLib.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		041F6D151B62E56500E9A804 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Lucas Kampmann Duroj";
+				TargetAttributes = {
+					041F6D481B62E6BE00E9A804 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					041F6D581B62E70F00E9A804 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = 041F6D181B62E56500E9A804 /* Build configuration list for PBXProject "VibLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 041F6D141B62E56500E9A804;
+			productRefGroup = 041F6D1E1B62E56500E9A804 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				041F6D481B62E6BE00E9A804 /* VibLibTest */,
+				041F6D581B62E70F00E9A804 /* VibLib */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		041F6D571B62E70F00E9A804 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		041F6D451B62E6BE00E9A804 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041F6D531B62E6EB00E9A804 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		041F6D541B62E70F00E9A804 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				041F6D761B62E77500E9A804 /* VibEffect.cpp in Sources */,
+				041F6D771B62E77500E9A804 /* VibLib.cpp in Sources */,
+				041F6D751B62E77500E9A804 /* VibDevice.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		041F6D831B62E7F700E9A804 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 041F6D581B62E70F00E9A804 /* VibLib */;
+			targetProxy = 041F6D821B62E7F700E9A804 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		041F6D221B62E56500E9A804 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		041F6D231B62E56500E9A804 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		041F6D4E1B62E6BE00E9A804 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		041F6D4F1B62E6BE00E9A804 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		041F6D6D1B62E70F00E9A804 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = VibLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		041F6D6E1B62E70F00E9A804 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = VibLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		041F6D181B62E56500E9A804 /* Build configuration list for PBXProject "VibLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				041F6D221B62E56500E9A804 /* Debug */,
+				041F6D231B62E56500E9A804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		041F6D4D1B62E6BE00E9A804 /* Build configuration list for PBXNativeTarget "VibLibTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				041F6D4E1B62E6BE00E9A804 /* Debug */,
+				041F6D4F1B62E6BE00E9A804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		041F6D6C1B62E70F00E9A804 /* Build configuration list for PBXNativeTarget "VibLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				041F6D6D1B62E70F00E9A804 /* Debug */,
+				041F6D6E1B62E70F00E9A804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 041F6D151B62E56500E9A804 /* Project object */;
+}
