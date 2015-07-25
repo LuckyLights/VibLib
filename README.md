@@ -1,8 +1,8 @@
 # VibLib
-VibLib is a OSX framework for vibrations and forcefeedback manipulations on game controllers.
+VibLib is a OSX framework for vibrations and force-feedback manipulations on game controllers.
 Currently at version 0.1.
 
-Road map:
+Roadmap:
 + remove effects
 + rescan for new devices
 + effect envelop support
