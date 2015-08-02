@@ -11,15 +11,22 @@
 
 #include <stdio.h>
 #include <ForceFeedback/ForceFeedback.h>
-#include <CoreFoundation/CFUUID.h>
 #include <string>
 
 using namespace std;
 
 class VibDevice;
 
+enum VibEffectType : UInt32 {
+	EFFECT_TYPE_SINE,
+	EFFECT_TYPE_SQUARE,
+	EFFECT_TYPE_TRIANGLE,
+	EFFECT_TYPE_SAWTOOTH_UP,
+	EFFECT_TYPE_SAWTOOTH_DOWN,
+};
+
 struct VibEffectData {
-	CFUUIDRef type = kFFEffectType_Sine_ID;
+	VibEffectType type = EFFECT_TYPE_SINE;
 	
 	struct {
 		UInt32 duration = 1000;
@@ -61,8 +68,12 @@ public:
 	void updateEffect(const VibEffectData& data);
 	
 private:
+	void createFFEffect();
 	void updateFFEffect();
+	void freeFFEffect();
+	
 	void updateCord();
+	
 	const VibDevice* device;
 	FFEFFECT ffEffect;
 	FFEffectObjectReference ffEffectRef;

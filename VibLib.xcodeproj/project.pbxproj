@@ -18,7 +18,6 @@
 		041F6D7F1B62E7E700E9A804 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */; };
 		041F6D801B62E7E700E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
 		041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D591B62E70F00E9A804 /* VibLib.framework */; };
-		041F6D851B62E91400E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +63,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */,
-				041F6D851B62E91400E9A804 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +414,7 @@
 				041F6D4F1B62E6BE00E9A804 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		041F6D6C1B62E70F00E9A804 /* Build configuration list for PBXNativeTarget "VibLib" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +423,7 @@
 				041F6D6E1B62E70F00E9A804 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -9,33 +9,47 @@
 #include "VibEffect.h"
 #include "VibDevice.h"
 #include <stdlib.h>
+#include <CoreFoundation/CFUUID.h>
 
-VibEffect::VibEffect(const VibDevice* device, string name, const VibEffectData &data) {
-	this->data = data;
-	this->device = device;
-	this->name = name;
-	
-	// Create effect
-	memset(&ffEffect, 0, sizeof(FFEFFECT));
-	ffEffect.rgdwAxes = NULL;
-	ffEffect.lpvTypeSpecificParams = NULL;
-	ffEffect.lpvTypeSpecificParams = NULL;
+CFUUIDRef effectTypeToNative(VibEffectType vibType) {
+	switch (vibType) {
+		case EFFECT_TYPE_SINE:
+			return kFFEffectType_Sine_ID;
+			break;
+		case EFFECT_TYPE_SQUARE:
+			return kFFEffectType_Square_ID;
+			break;
+		case EFFECT_TYPE_TRIANGLE:
+			return kFFEffectType_Triangle_ID;
+			break;
+		case EFFECT_TYPE_SAWTOOTH_DOWN:
+			return kFFEffectType_SawtoothDown_ID;
+			break;
+		case EFFECT_TYPE_SAWTOOTH_UP:
+			return kFFEffectType_SawtoothUp_ID;
+			break;
+	}
+	return kFFEffectType_Sine_ID;
+}
+
+VibEffect::VibEffect(const VibDevice* device, string name, const VibEffectData &data) :
+data(data),
+device(device),
+name(name),
+ffEffectRef(NULL)
+{
+	createFFEffect();
 	updateFFEffect();
 	
 	//Create FF effect
-	HRESULT ret = FFDeviceCreateEffect(device->ffDevice, data.type, &ffEffect, &ffEffectRef);
+	HRESULT ret = FFDeviceCreateEffect(device->ffDevice, effectTypeToNative(data.type), &ffEffect, &ffEffectRef);
 	if(ret != FF_OK) {
 		printf("VibEffect: Failed to create effect");
 	}
 }
 
 VibEffect::~VibEffect() {
-	if(ffEffect.rgdwAxes)
-		free(ffEffect.rgdwAxes);
-	if(ffEffect.lpvTypeSpecificParams)
-		free(ffEffect.lpvTypeSpecificParams);
-	if(ffEffect.rglDirection)
-		free(ffEffect.rglDirection);
+	freeFFEffect();
 }
 
 void VibEffect::start() {
@@ -47,8 +61,9 @@ void VibEffect::start() {
 
 void VibEffect::updateCord() {
 	
+	// if no direction as assigne default to SPHERICAL
 	if (data.effect.axesCount == 0) {
-		ffEffect.dwFlags |= FFEFF_SPHERICAL;     /* Set as default. */
+		ffEffect.dwFlags |= FFEFF_SPHERICAL;
 		ffEffect.rglDirection = NULL;
 	}
 	
@@ -92,17 +107,18 @@ void VibEffect::updateEffect(const VibEffectData& data) {
 	this->data = data;
 	updateFFEffect();
 	
-	FFEffectParameterFlag flags = FFEP_DIRECTION |
-	FFEP_DURATION |
-	FFEP_ENVELOPE |
-	FFEP_STARTDELAY |
-	FFEP_TRIGGERBUTTON |
-	FFEP_TRIGGERREPEATINTERVAL | FFEP_TYPESPECIFICPARAMS;
-	
+	static const FFEffectParameterFlag flags = FFEP_DIRECTION | FFEP_DURATION | FFEP_ENVELOPE | FFEP_STARTDELAY | FFEP_TYPESPECIFICPARAMS;
 	HRESULT ret = FFEffectSetParameters(ffEffectRef, &ffEffect, flags);
 	if (ret != FF_OK) {
 		printf("VibEffect: Unable to update effect.");
 	}
+}
+
+void VibEffect::createFFEffect() {
+	memset(&ffEffect, 0, sizeof(FFEFFECT));
+	ffEffect.rgdwAxes = NULL;
+	ffEffect.lpvTypeSpecificParams = NULL;
+	ffEffect.lpvTypeSpecificParams = NULL;
 }
 
 void VibEffect::updateFFEffect() {
@@ -114,7 +130,6 @@ void VibEffect::updateFFEffect() {
 	ffEffect.dwDuration = data.effect.duration * 1000;
 	ffEffect.dwStartDelay = data.effect.delay * 1000;    /* In microseconds. */
 	
-	/* Axes. */
 	ffEffect.cAxes = device->axisCount;
 	if (ffEffect.cAxes > 0) {
 		DWORD* axes = ffEffect.rgdwAxes;
@@ -130,12 +145,13 @@ void VibEffect::updateFFEffect() {
 		ffEffect.rgdwAxes = axes;
 	}
 	
-	if(data.type == kFFEffectType_Sine_ID
-	   || data.type == kFFEffectType_Square_ID
-	   || data.type == kFFEffectType_Triangle_ID
-	   || data.type == kFFEffectType_SawtoothUp_ID
-	   || data.type == kFFEffectType_SawtoothDown_ID) {
-		
+	
+	//update periodic data
+	if(data.type == EFFECT_TYPE_SINE
+	   || data.type == EFFECT_TYPE_SQUARE
+	   || data.type == EFFECT_TYPE_TRIANGLE
+	   || data.type == EFFECT_TYPE_SAWTOOTH_UP
+	   || data.type == EFFECT_TYPE_SAWTOOTH_DOWN) {
 		FFPERIODIC* periodic = (FFPERIODIC*)ffEffect.lpvTypeSpecificParams;
 		if(!periodic) {
 			periodic = (FFPERIODIC*)malloc(sizeof(FFPERIODIC));
@@ -145,10 +161,26 @@ void VibEffect::updateFFEffect() {
 		periodic->lOffset = CONVERT(data.periodic.offset);
 		periodic->dwPhase = data.periodic.phase;
 		periodic->dwPeriod = data.periodic.period * 1000;
+		
 		ffEffect.cbTypeSpecificParams = sizeof(FFPERIODIC);
 		ffEffect.lpvTypeSpecificParams = (void*)periodic;
 		
 		updateCord();
 	}
 	
+}
+
+void VibEffect::freeFFEffect() {
+	
+	if(ffEffect.rgdwAxes)
+		free(ffEffect.rgdwAxes);
+	if(ffEffect.lpvTypeSpecificParams)
+		free(ffEffect.lpvTypeSpecificParams);
+	if(ffEffect.rglDirection)
+		free(ffEffect.rglDirection);
+	
+	if(ffEffectRef != NULL) {
+		FFEffectUnload(ffEffectRef);
+		ffEffectRef = NULL;
+	}
 }

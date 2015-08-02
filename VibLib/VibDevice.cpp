@@ -11,8 +11,10 @@
 #include <CoreFoundation/CFNumber.h>
 #include <assert.h>
 
-VibDevice::VibDevice(io_service_t ioService) {
-	this->ioService = ioService;
+VibDevice::VibDevice(io_service_t ioService) :
+ioService(ioService),
+name(NULL)
+{
 	this->setDeviceName();
 	this->setUsagePage();
 	this->setForceFeedback();
@@ -24,9 +26,12 @@ VibDevice::~VibDevice() {
 		delete iter->second;
 	}
 	effects.clear();
+	
+	if(name != NULL)
+		delete name;
 }
 
-VibEffect* VibDevice::createEffect(string name, const VibEffectData& data) {
+VibEffect* VibDevice::createEffect(const string name, const VibEffectData& data) {
 	if(effects.size() >= storageCapacity) {
 		printf("VibDevice: Max amount of effect has been reached.");
 		return NULL;
@@ -40,6 +45,20 @@ VibEffect* VibDevice::createEffect(string name, const VibEffectData& data) {
 
 VibEffect* VibDevice::getEffect(string name) {
 	return effects.at(name);
+}
+
+void VibDevice::deleteEffect(const string name) {
+	deleteEffect(getEffect(name));
+}
+
+void VibDevice::deleteEffect(VibEffect* effect) {
+	if(effect == NULL)
+		return;
+	VibEffect* _effect = effects.at(effect->name);
+	if(_effect == effect) {
+		effects.erase(_effect->name);
+		delete _effect;
+	}
 }
 
 
@@ -66,48 +85,42 @@ void VibDevice::setDeviceName() {
 	/* Mac OS X currently is not mirroring all USB properties to HID page so need to look at USB device page also
 	 * get dictionary for usb properties: step up two levels and get CF dictionary for USB properties
 	 */
-	if ((KERN_SUCCESS ==
-		 IORegistryEntryGetParentEntry(ioService, kIOServicePlane, &parent1))
-		&& (KERN_SUCCESS ==
-			IORegistryEntryGetParentEntry(parent1, kIOServicePlane, &parent2))
-		&& (KERN_SUCCESS ==
-			IORegistryEntryCreateCFProperties(parent2, &usbProperties,
-											  kCFAllocatorDefault,
-											  kNilOptions))) {
-				if (usbProperties) {
-					CFTypeRef refCF = 0;
-					/* get device info
-					 * try hid dictionary first, if fail then go to usb dictionary
-					 */
-					
-					
-					/* Get product name */
-					refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDProductKey));
-					if (!refCF) {
-						refCF = CFDictionaryGetValue(usbProperties, CFSTR("USB Product Name"));
-					}
-					//					printf("refCF: %s", CFStringGetCStringPtr(refCF, CFStringGetSystemEncoding()));
-					if (refCF) {
-						if (!CFStringGetCString((CFStringRef)refCF, name, 256, CFStringGetSystemEncoding())) {
-							 printf("VibDevice: CFStringGetCString error retrieving pDevice->product.");
-						}
-					}
-					
-					CFRelease(usbProperties);
-				} else {
-					printf("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
-				}
-				
-				/* Release stuff. */
-				if (kIOReturnSuccess != IOObjectRelease(parent2)) {
-					printf("VibDevice: IOObjectRelease error with parent2.");
-				}
-				if (kIOReturnSuccess != IOObjectRelease(parent1)) {
-					printf("VibDevice: IOObjectRelease error with parent1.");
-				}
-			} else {
-				printf("VibDevice: Error getting registry entries.");
+	if ((KERN_SUCCESS == IORegistryEntryGetParentEntry(ioService, kIOServicePlane, &parent1)) &&
+		(KERN_SUCCESS == IORegistryEntryGetParentEntry(parent1, kIOServicePlane, &parent2)) &&
+		(KERN_SUCCESS == IORegistryEntryCreateCFProperties(parent2, &usbProperties, kCFAllocatorDefault, kNilOptions))) {
+		if (usbProperties) {
+			CFTypeRef refCF = 0;
+			/* get device info
+			 * try hid dictionary first, if fail then go to usb dictionary
+			 */
+			
+			/* Get product name */
+			refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDProductKey));
+			if (!refCF) {
+				refCF = CFDictionaryGetValue(usbProperties, CFSTR("USB Product Name"));
 			}
+			//					printf("refCF: %s", CFStringGetCStringPtr(refCF, CFStringGetSystemEncoding()));
+			if (refCF) {
+				if (!CFStringGetCString((CFStringRef)refCF, name, 256, CFStringGetSystemEncoding())) {
+					printf("VibDevice: CFStringGetCString error retrieving pDevice->product.");
+				}
+			}
+			
+			CFRelease(usbProperties);
+		} else {
+			printf("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
+		}
+		
+		/* Release stuff. */
+		if (kIOReturnSuccess != IOObjectRelease(parent2)) {
+			printf("VibDevice: IOObjectRelease error with parent2.");
+		}
+		if (kIOReturnSuccess != IOObjectRelease(parent1)) {
+			printf("VibDevice: IOObjectRelease error with parent1.");
+		}
+	} else {
+		printf("VibDevice: Error getting registry entries.");
+	}
 }
 
 

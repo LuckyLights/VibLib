@@ -8,13 +8,15 @@
 
 #ifndef __TestVibration__VibDevice__
 #define __TestVibration__VibDevice__
+
 #include "VibEffect.h"
+
+#include <IOKit/IOKitLib.h>
+#include <ForceFeedback/ForceFeedback.h>
 
 #include <stdio.h>
 #include <map>
 #include <string>
-#include <IOKit/IOKitLib.h>
-#include <ForceFeedback/ForceFeedback.h>
 
 using namespace std;
 
@@ -44,6 +46,8 @@ public:
 	
 	VibEffect* createEffect(string name, const VibEffectData& data);
 	VibEffect* getEffect(string name);
+	void deleteEffect(string name);
+	void deleteEffect(VibEffect* effect);
 	
 private:
 	void setDeviceName();

@@ -21,7 +21,6 @@ int main (void) {
 		
 		printf("Test 1: Create effect \n");
 		VibEffectData data = VibEffectData();
-		data.type = kFFEffectType_Square_ID;
 		data.periodic.period = 1000;
 		data.periodic.magnitude = 10000;
 		data.effect.duration = 1000;
@@ -37,21 +36,27 @@ int main (void) {
 		
 		sleep(1);
 		
-		printf("Test 2: Update effect \n");
+//		printf("Test 2: Update effect \n");
+//		for (int i = 0; i < deviceCount; ++i) {
+//			auto device = vibLib->getDevice(i);
+//			
+//			data.effect.duration = 4000;
+//			data.periodic.magnitude = 30000;
+//			
+//			auto effect = device->getEffect("vibrate");
+//			if(effect != NULL)
+//				effect->updateEffect(data);
+//			
+//			effect->start();
+//		}
+//		sleep(4);
+		
+		
+		printf("Test 3: Deletes effects \n");
 		for (int i = 0; i < deviceCount; ++i) {
 			auto device = vibLib->getDevice(i);
-			
-			data.effect.duration = 4000;
-			data.periodic.magnitude = 30000;
-			data.type = kFFEffectType_Square_ID;
-			
-			auto effect = device->getEffect("vibrate");
-			if(effect != NULL)
-				effect->updateEffect(data);
-			
-			effect->start();
+			device->deleteEffect("vibrate");
 		}
-		sleep(4);
 		
 		printf("end");
 	}
