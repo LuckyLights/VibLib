@@ -11,6 +11,58 @@
 #include <stdlib.h>
 #include <CoreFoundation/CFUUID.h>
 
+#define CCONVERT(x)   (((x) > 0x7FFF) ? 10000 : ((x)*10000) / 0x7FFF)
+#define CONVERT(x)    (((x)*10000) / 0x7FFF)
+
+const char* FFStrError(signed long err) {
+	switch (err) {
+		case FFERR_DEVICEFULL:
+			return "device full";
+		case FFERR_DEVICEPAUSED:
+			return "device paused";
+		case FFERR_DEVICERELEASED:
+			return "device released";
+		case FFERR_EFFECTPLAYING:
+			return "effect playing";
+		case FFERR_EFFECTTYPEMISMATCH:
+			return "effect type mismatch";
+		case FFERR_EFFECTTYPENOTSUPPORTED:
+			return "effect type not supported";
+		case FFERR_GENERIC:
+			return "undetermined error";
+		case FFERR_HASEFFECTS:
+			return "device has effects";
+		case FFERR_INCOMPLETEEFFECT:
+			return "incomplete effect";
+		case FFERR_INTERNAL:
+			return "internal fault";
+		case FFERR_INVALIDDOWNLOADID:
+			return "invalid download id";
+		case FFERR_INVALIDPARAM:
+			return "invalid parameter";
+		case FFERR_MOREDATA:
+			return "more data";
+		case FFERR_NOINTERFACE:
+			return "interface not supported";
+		case FFERR_NOTDOWNLOADED:
+			return "effect is not downloaded";
+		case FFERR_NOTINITIALIZED:
+			return "object has not been initialized";
+		case FFERR_OUTOFMEMORY:
+			return "out of memory";
+		case FFERR_UNPLUGGED:
+			return "device is unplugged";
+		case FFERR_UNSUPPORTED:
+			return "function call unsupported";
+		case FFERR_UNSUPPORTEDAXIS:
+			return "axis unsupported";
+			
+		default:
+			return "unknown error";
+	}
+}
+
+
 CFUUIDRef effectTypeToNative(VibEffectType vibType) {
 	switch (vibType) {
 		case EFFECT_TYPE_SINE:
@@ -27,6 +79,14 @@ CFUUIDRef effectTypeToNative(VibEffectType vibType) {
 			break;
 		case EFFECT_TYPE_SAWTOOTH_UP:
 			return kFFEffectType_SawtoothUp_ID;
+			break;
+			
+		case EFFECT_TYPE_CONSTANT:
+			return kFFEffectType_ConstantForce_ID;
+			break;
+			
+		case EFFECT_TYPE_CUSTOM:
+			return kFFEffectType_CustomForce_ID;
 			break;
 	}
 	return kFFEffectType_Sine_ID;
@@ -67,45 +127,70 @@ void VibEffect::updateCord() {
 		ffEffect.rglDirection = NULL;
 	}
 	
-	LONG* rglDir = ffEffect.rglDirection;
-	if(!rglDir) {
-		rglDir = (LONG*)malloc(sizeof(LONG) * data.effect.axesCount);
+	LONG* ffDir = ffEffect.rglDirection;
+	if(ffDir == NULL) {
+		ffDir = (LONG*)malloc(sizeof(LONG) * data.effect.axesCount);
 	}
-	memset(rglDir, 0, sizeof(LONG) * data.effect.axesCount);
-	ffEffect.rglDirection = rglDir;
+	memset(ffDir, 0, sizeof(LONG) * data.effect.axesCount);
+	ffEffect.rglDirection = ffDir;
 	
 	switch (data.effect.axisCord) {
 		case FFEFF_POLAR:
 			ffEffect.dwFlags |= FFEFF_POLAR;
-			rglDir[0] = data.effect.axes[0];
+			ffDir[0] = data.effect.axes[0];
 			break;
 		case FFEFF_CARTESIAN:
 			ffEffect.dwFlags |= FFEFF_CARTESIAN;
-			rglDir[0] = data.effect.axes[0];
+			ffDir[0] = data.effect.axes[0];
 			if (data.effect.axesCount > 1)
-				rglDir[1] = data.effect.axes[1];
+				ffDir[1] = data.effect.axes[1];
 			if (data.effect.axesCount > 2)
-				rglDir[2] = data.effect.axes[2];
+				ffDir[2] = data.effect.axes[2];
 			break;
 		case FFEFF_SPHERICAL:
 			ffEffect.dwFlags |= FFEFF_SPHERICAL;
-			rglDir[0] = data.effect.axes[0];
+			ffDir[0] = data.effect.axes[0];
 			if (data.effect.axesCount > 1)
-				rglDir[1] = data.effect.axes[1];
+				ffDir[1] = data.effect.axes[1];
 			if (data.effect.axesCount > 2)
-				rglDir[2] = data.effect.axes[2];
+				ffDir[2] = data.effect.axes[2];
 			break;
 		default:
 			printf("VibEffect: Unknown direction type.");
 	}
 }
 
-#define CCONVERT(x)   (((x) > 0x7FFF) ? 10000 : ((x)*10000) / 0x7FFF)
-#define CONVERT(x)    (((x)*10000) / 0x7FFF)
+void VibEffect::updateEnvelope() {
+	
+	if ((data.envelope.attackTime == 0) && (data.envelope.fadeTime == 0)) {
+		if(ffEffect.lpEnvelope != NULL) {
+			free(ffEffect.lpEnvelope);
+			ffEffect.lpEnvelope = NULL;
+		}
+	} else {
+		FFENVELOPE* ffEnvelope = ffEffect.lpEnvelope;
+		if(ffEnvelope == NULL) {
+			ffEnvelope = (FFENVELOPE*)malloc(sizeof(FFENVELOPE));
+		}
+		memset(ffEnvelope, 0, sizeof(FFENVELOPE));
+		ffEffect.lpEnvelope = ffEnvelope;
+		
+		ffEnvelope->dwSize = sizeof(FFENVELOPE);
+		ffEnvelope->dwAttackLevel = CCONVERT(data.envelope.attackLevel);
+		ffEnvelope->dwAttackTime = data.envelope.attackTime * 1000;
+		ffEnvelope->dwFadeLevel = CCONVERT(data.envelope.fadeLevel);
+		ffEnvelope->dwFadeTime = data.envelope.fadeTime * 1000;
+	}
+}
 
 void VibEffect::updateEffect(const VibEffectData& data) {
 	this->data = data;
+	if(lastType != EFFECT_TYPE_NONE && lastType != data.type) {
+		freeFFEffect();
+		createFFEffect();
+	}
 	updateFFEffect();
+	lastType = data.type;
 	
 	static const FFEffectParameterFlag flags = FFEP_DIRECTION | FFEP_DURATION | FFEP_ENVELOPE | FFEP_STARTDELAY | FFEP_TYPESPECIFICPARAMS;
 	HRESULT ret = FFEffectSetParameters(ffEffectRef, &ffEffect, flags);
@@ -117,8 +202,9 @@ void VibEffect::updateEffect(const VibEffectData& data) {
 void VibEffect::createFFEffect() {
 	memset(&ffEffect, 0, sizeof(FFEFFECT));
 	ffEffect.rgdwAxes = NULL;
+	ffEffect.rglDirection = NULL;
 	ffEffect.lpvTypeSpecificParams = NULL;
-	ffEffect.lpvTypeSpecificParams = NULL;
+	ffEffect.lpEnvelope = NULL;
 }
 
 void VibEffect::updateFFEffect() {
@@ -145,27 +231,67 @@ void VibEffect::updateFFEffect() {
 		ffEffect.rgdwAxes = axes;
 	}
 	
-	
-	//update periodic data
-	if(data.type == EFFECT_TYPE_SINE
-	   || data.type == EFFECT_TYPE_SQUARE
-	   || data.type == EFFECT_TYPE_TRIANGLE
-	   || data.type == EFFECT_TYPE_SAWTOOTH_UP
-	   || data.type == EFFECT_TYPE_SAWTOOTH_DOWN) {
-		FFPERIODIC* periodic = (FFPERIODIC*)ffEffect.lpvTypeSpecificParams;
-		if(!periodic) {
-			periodic = (FFPERIODIC*)malloc(sizeof(FFPERIODIC));
+	switch (data.type) {
+		case EFFECT_TYPE_SINE:
+		case EFFECT_TYPE_TRIANGLE:
+		case EFFECT_TYPE_SQUARE:
+		case EFFECT_TYPE_SAWTOOTH_DOWN:
+		case EFFECT_TYPE_SAWTOOTH_UP: { 	//update periodic data
+			FFPERIODIC* periodic = (FFPERIODIC*)ffEffect.lpvTypeSpecificParams;
+			if(periodic == NULL) {
+				periodic = (FFPERIODIC*)malloc(sizeof(FFPERIODIC));
+			}
+			memset(periodic, 0, sizeof(FFPERIODIC));
+			periodic->dwMagnitude = CONVERT(data.periodic.magnitude);
+			periodic->lOffset = CONVERT(data.periodic.offset);
+			periodic->dwPhase = data.periodic.phase;
+			periodic->dwPeriod = data.periodic.period * 1000;
+			
+			ffEffect.cbTypeSpecificParams = sizeof(FFPERIODIC);
+			ffEffect.lpvTypeSpecificParams = periodic;
+			
+			updateEnvelope();
+			updateCord();
 		}
-		memset(periodic, 0, sizeof(FFPERIODIC));
-		periodic->dwMagnitude = CONVERT(data.periodic.magnitude);
-		periodic->lOffset = CONVERT(data.periodic.offset);
-		periodic->dwPhase = data.periodic.phase;
-		periodic->dwPeriod = data.periodic.period * 1000;
-		
-		ffEffect.cbTypeSpecificParams = sizeof(FFPERIODIC);
-		ffEffect.lpvTypeSpecificParams = (void*)periodic;
-		
-		updateCord();
+			break;
+		case EFFECT_TYPE_CONSTANT: {
+			FFCONSTANTFORCE* constant = (FFCONSTANTFORCE*)ffEffect.lpvTypeSpecificParams;
+			if(constant == NULL) {
+				constant = (FFCONSTANTFORCE*)malloc(sizeof(FFCONSTANTFORCE));
+			}
+			memset(constant, 0, sizeof(FFCONSTANTFORCE));
+			constant->lMagnitude = CONVERT(data.constant.magnitude);
+			
+			ffEffect.cbTypeSpecificParams = sizeof(FFCONSTANTFORCE);
+			ffEffect.lpvTypeSpecificParams = constant;
+			
+			updateEnvelope();
+			updateCord();
+		}
+			break;
+		case EFFECT_TYPE_CUSTOM: {
+			FFCUSTOMFORCE* custom = (FFCUSTOMFORCE*)ffEffect.lpvTypeSpecificParams;
+			if(custom == NULL) {
+				custom = (FFCUSTOMFORCE*)malloc(sizeof(FFCUSTOMFORCE));
+			}
+			memset(custom, 0, sizeof(FFCUSTOMFORCE));
+			
+			custom->cChannels = data.custom.channelCount;
+			custom->dwSamplePeriod = data.custom.samplePeriod * 1000;
+			custom->cSamples = data.custom.sampelCount;
+			
+			custom->rglForceData = (LONG*)malloc(sizeof(LONG) * custom->cSamples * custom->cChannels);
+			for (int i = 0; i < custom->cSamples * custom->cChannels; ++i) {
+				custom->rglForceData[i] = CCONVERT(data.custom.forceData[i]);
+			}
+			
+			ffEffect.cbTypeSpecificParams = sizeof(FFCUSTOMFORCE);
+			ffEffect.lpvTypeSpecificParams = custom;
+			
+			updateEnvelope();
+			updateCord();
+		}
+			break;
 	}
 	
 }

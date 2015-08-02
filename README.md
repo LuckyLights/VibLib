@@ -3,13 +3,16 @@ VibLib is a OSX framework for vibrations and force-feedback manipulations on gam
 
 ## Roadmap
 
-#### Next version
+#### TODO
 * Rescan for new devices
-* Effect envelop support
-* Add effect types constant and custom
 * Unity3D API
 
-#### 0.2 (Current)
+#### 0.3 (Current)
+* Redownloads effects to device if type is updates 
+* Effect envelop support
+* Add effect types constant and custom
+
+#### 0.2
 * Remove effects
 * Fix CoreFoundation dependencies
 

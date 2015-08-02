@@ -18,11 +18,17 @@ using namespace std;
 class VibDevice;
 
 enum VibEffectType : UInt32 {
-	EFFECT_TYPE_SINE,
-	EFFECT_TYPE_SQUARE,
-	EFFECT_TYPE_TRIANGLE,
-	EFFECT_TYPE_SAWTOOTH_UP,
-	EFFECT_TYPE_SAWTOOTH_DOWN,
+	EFFECT_TYPE_NONE = 0,
+	//Periodics
+	EFFECT_TYPE_SINE = 1,
+	EFFECT_TYPE_SQUARE = 2,
+	EFFECT_TYPE_TRIANGLE = 3,
+	EFFECT_TYPE_SAWTOOTH_UP = 4,
+	EFFECT_TYPE_SAWTOOTH_DOWN = 5,
+	//Constant
+	EFFECT_TYPE_CONSTANT = 6,
+	//Custom
+	EFFECT_TYPE_CUSTOM = 7,
 };
 
 struct VibEffectData {
@@ -44,7 +50,7 @@ struct VibEffectData {
 		UInt32 attackTime;
 		UInt32 fadeLevel;
 		UInt32 fadeTime;
-	} envelop;
+	} envelope;
 	
 	struct {
 		SInt16 magnitude;
@@ -53,6 +59,16 @@ struct VibEffectData {
 		UInt32 period;
 	} periodic;
 	
+	struct {
+		LONG magnitude;
+	} constant;
+	
+	struct {
+		UInt32 channelCount;
+		UInt32 samplePeriod;
+		UInt32 sampelCount;
+		LONG* forceData;
+	} custom;
 };
 
 class VibEffect {
@@ -72,8 +88,10 @@ private:
 	void updateFFEffect();
 	void freeFFEffect();
 	
+	void updateEnvelope();
 	void updateCord();
 	
+	VibEffectType lastType = EFFECT_TYPE_NONE;
 	const VibDevice* device;
 	FFEFFECT ffEffect;
 	FFEffectObjectReference ffEffectRef;
