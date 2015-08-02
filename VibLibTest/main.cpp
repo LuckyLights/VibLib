@@ -30,26 +30,26 @@ int main (void) {
 			auto device = vibLib->getDevice(i);
 			auto effect = device->createEffect("vibrate", data);
 			effect->start();
-			printf("Test 1: Play device num: %i \n", i);
+			printf("Test 1.%i: Play device num: %i \n", i+1, i);
 			sleep(1);
 		}
 		
 		sleep(1);
 		
-//		printf("Test 2: Update effect \n");
-//		for (int i = 0; i < deviceCount; ++i) {
-//			auto device = vibLib->getDevice(i);
-//			
-//			data.effect.duration = 4000;
-//			data.periodic.magnitude = 30000;
-//			
-//			auto effect = device->getEffect("vibrate");
-//			if(effect != NULL)
-//				effect->updateEffect(data);
-//			
-//			effect->start();
-//		}
-//		sleep(4);
+		printf("Test 2: Update effect \n");
+		for (int i = 0; i < deviceCount; ++i) {
+			auto device = vibLib->getDevice(i);
+			
+			data.effect.duration = 2000;
+			data.periodic.magnitude = 30000;
+			
+			auto effect = device->getEffect("vibrate");
+			if(effect != NULL)
+				effect->updateEffect(data);
+			
+			effect->start();
+		}
+		sleep(3);
 		
 		
 		printf("Test 3: Deletes effects \n");
