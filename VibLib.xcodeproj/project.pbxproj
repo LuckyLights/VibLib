@@ -18,6 +18,7 @@
 		041F6D7F1B62E7E700E9A804 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */; };
 		041F6D801B62E7E700E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
 		041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D591B62E70F00E9A804 /* VibLib.framework */; };
+		045F0FF91B6FC40F004327FC /* VibUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045F0FF81B6FC40F004327FC /* VibUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,8 @@
 		041F6D3F1B62E67300E9A804 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		041F6D491B62E6BE00E9A804 /* VibLibTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VibLibTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		041F6D591B62E70F00E9A804 /* VibLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VibLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		045F0FF71B6FC1E0004327FC /* VibUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VibUtil.h; sourceTree = "<group>"; };
+		045F0FF81B6FC40F004327FC /* VibUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VibUtil.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 				041F6D321B62E63E00E9A804 /* VibEffect.h */,
 				041F6D331B62E63E00E9A804 /* VibLib.cpp */,
 				041F6D341B62E63E00E9A804 /* VibLib.h */,
+				045F0FF71B6FC1E0004327FC /* VibUtil.h */,
+				045F0FF81B6FC40F004327FC /* VibUtil.cpp */,
 			);
 			path = VibLib;
 			sourceTree = "<group>";
@@ -243,6 +248,7 @@
 				041F6D761B62E77500E9A804 /* VibEffect.cpp in Sources */,
 				041F6D771B62E77500E9A804 /* VibLib.cpp in Sources */,
 				041F6D751B62E77500E9A804 /* VibDevice.cpp in Sources */,
+				045F0FF91B6FC40F004327FC /* VibUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,70 +1,37 @@
-//
-//  VibEffect.cpp
-//  VibLib
-//
-//  Created by Lucas Duroj on 23/07/15.
-//  Copyright (c) 2015 Lucas Duroj. All rights reserved.
-//
+/*
+ VibLib
+ Copyright (c) 2015 Lucas Kampmann Duroj <lucasduroj@gmail.com>
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgement in the product documentation would be
+ appreciated but is not required.
+ 
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
 
 #include "VibEffect.h"
 #include "VibDevice.h"
 #include <stdlib.h>
 #include <CoreFoundation/CFUUID.h>
 
-#define CCONVERT(x)   (((x) > 0x7FFF) ? 10000 : ((x)*10000) / 0x7FFF)
-#define CONVERT(x)    (((x)*10000) / 0x7FFF)
-
-const char* FFStrError(signed long err) {
-	switch (err) {
-		case FFERR_DEVICEFULL:
-			return "device full";
-		case FFERR_DEVICEPAUSED:
-			return "device paused";
-		case FFERR_DEVICERELEASED:
-			return "device released";
-		case FFERR_EFFECTPLAYING:
-			return "effect playing";
-		case FFERR_EFFECTTYPEMISMATCH:
-			return "effect type mismatch";
-		case FFERR_EFFECTTYPENOTSUPPORTED:
-			return "effect type not supported";
-		case FFERR_GENERIC:
-			return "undetermined error";
-		case FFERR_HASEFFECTS:
-			return "device has effects";
-		case FFERR_INCOMPLETEEFFECT:
-			return "incomplete effect";
-		case FFERR_INTERNAL:
-			return "internal fault";
-		case FFERR_INVALIDDOWNLOADID:
-			return "invalid download id";
-		case FFERR_INVALIDPARAM:
-			return "invalid parameter";
-		case FFERR_MOREDATA:
-			return "more data";
-		case FFERR_NOINTERFACE:
-			return "interface not supported";
-		case FFERR_NOTDOWNLOADED:
-			return "effect is not downloaded";
-		case FFERR_NOTINITIALIZED:
-			return "object has not been initialized";
-		case FFERR_OUTOFMEMORY:
-			return "out of memory";
-		case FFERR_UNPLUGGED:
-			return "device is unplugged";
-		case FFERR_UNSUPPORTED:
-			return "function call unsupported";
-		case FFERR_UNSUPPORTEDAXIS:
-			return "axis unsupported";
-			
-		default:
-			return "unknown error";
-	}
-}
-
-
 CFUUIDRef effectTypeToNative(VibEffectType vibType) {
 	switch (vibType) {
+		case EFFECT_TYPE_NONE:
+			VibLibError("VibEffect: can't match EFFECT_TYPE_NONE to native ID");
+			break;
 		case EFFECT_TYPE_SINE:
 			return kFFEffectType_Sine_ID;
 			break;
@@ -104,7 +71,7 @@ ffEffectRef(NULL)
 	//Create FF effect
 	HRESULT ret = FFDeviceCreateEffect(device->ffDevice, effectTypeToNative(data.type), &ffEffect, &ffEffectRef);
 	if(ret != FF_OK) {
-		printf("VibEffect: Failed to create effect");
+		VibLibError("VibEffect: Failed to create effect", ret);
 	}
 }
 
@@ -115,7 +82,7 @@ VibEffect::~VibEffect() {
 void VibEffect::start() {
 	HRESULT ret = FFEffectStart(ffEffectRef, 1, 0);
 	if (ret != FF_OK) {
-		printf("VibEffect: Failed to start effter");
+		VibLibError("VibEffect: Failed to start effect", ret);
 	}
 }
 
@@ -156,7 +123,7 @@ void VibEffect::updateCord() {
 				ffDir[2] = data.effect.axes[2];
 			break;
 		default:
-			printf("VibEffect: Unknown direction type.");
+			VibLibError("VibEffect: Unknown direction type.");
 	}
 }
 
@@ -195,7 +162,7 @@ void VibEffect::updateEffect(const VibEffectData& data) {
 	static const FFEffectParameterFlag flags = FFEP_DIRECTION | FFEP_DURATION | FFEP_ENVELOPE | FFEP_STARTDELAY | FFEP_TYPESPECIFICPARAMS;
 	HRESULT ret = FFEffectSetParameters(ffEffectRef, &ffEffect, flags);
 	if (ret != FF_OK) {
-		printf("VibEffect: Unable to update effect.");
+		VibLibError("VibEffect: Unable to update effect.", ret);
 	}
 }
 
@@ -232,6 +199,9 @@ void VibEffect::updateFFEffect() {
 	}
 	
 	switch (data.type) {
+		case EFFECT_TYPE_NONE:
+			VibLibError("VibEffect: can't update effect with type EFFECT_TYPE_NONE");
+			return;
 		case EFFECT_TYPE_SINE:
 		case EFFECT_TYPE_TRIANGLE:
 		case EFFECT_TYPE_SQUARE:

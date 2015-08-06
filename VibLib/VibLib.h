@@ -1,13 +1,29 @@
-//
-//  VibLib.h
-//  VibLib
-//
-//  Created by Lucas Duroj on 23/07/15.
-//  Copyright (c) 2015 Lucas Duroj. All rights reserved.
-//
+/*
+ VibLib
+ Copyright (c) 2015 Lucas Kampmann Duroj <lucasduroj@gmail.com>
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgement in the product documentation would be
+ appreciated but is not required.
+ 
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
 
-#ifndef __TestVibration__VibLib__
-#define __TestVibration__VibLib__
+#ifndef __VibLib__VibLib__
+#define __VibLib__VibLib__
 
 #include <stdio.h>
 #include <vector>
@@ -29,4 +45,4 @@ private:
 	
 };
 
-#endif /* defined(__TestVibration__VibLib__) */
+#endif /* defined(__VibLib__VibLib__) */

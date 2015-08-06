@@ -1,15 +1,32 @@
-//
-//  VibDevice.cpp
-//  VibLib
-//
-//  Created by Lucas Duroj on 23/07/15.
-//  Copyright (c) 2015 Lucas Duroj. All rights reserved.
-//
+/*
+ VibLib
+ Copyright (c) 2015 Lucas Kampmann Duroj <lucasduroj@gmail.com>
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ 
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software
+ in a product, an acknowledgement in the product documentation would be
+ appreciated but is not required.
+ 
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ 
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
 
 #include "VibDevice.h"
 #include <IOKit/hid/IOHIDKeys.h>
 #include <CoreFoundation/CFNumber.h>
 #include <assert.h>
+#include "VibUtil.h"
 
 VibDevice::VibDevice(io_service_t ioService) :
 ioService(ioService),
@@ -61,12 +78,6 @@ void VibDevice::deleteEffect(VibEffect* effect) {
 	}
 }
 
-
-bool VibDevice::sendCommand(FFCommandFlag flags) {
-	HRESULT ret = FFDeviceSendForceFeedbackCommand(ffDevice, flags);
-	return ret == FF_OK;
-}
-
 void VibDevice::setDeviceName() {
 	name = new char[256];
 	
@@ -99,27 +110,28 @@ void VibDevice::setDeviceName() {
 			if (!refCF) {
 				refCF = CFDictionaryGetValue(usbProperties, CFSTR("USB Product Name"));
 			}
-			//					printf("refCF: %s", CFStringGetCStringPtr(refCF, CFStringGetSystemEncoding()));
+			
+			
 			if (refCF) {
 				if (!CFStringGetCString((CFStringRef)refCF, name, 256, CFStringGetSystemEncoding())) {
-					printf("VibDevice: CFStringGetCString error retrieving pDevice->product.");
+					VibLibError("VibDevice: CFStringGetCString error retrieving pDevice->product.");
 				}
 			}
 			
 			CFRelease(usbProperties);
 		} else {
-			printf("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
+			VibLibError("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
 		}
 		
 		/* Release stuff. */
 		if (kIOReturnSuccess != IOObjectRelease(parent2)) {
-			printf("VibDevice: IOObjectRelease error with parent2.");
+			VibLibError("VibDevice: IOObjectRelease error with parent2.");
 		}
 		if (kIOReturnSuccess != IOObjectRelease(parent1)) {
-			printf("VibDevice: IOObjectRelease error with parent1.");
+			VibLibError("VibDevice: IOObjectRelease error with parent1.");
 		}
 	} else {
-		printf("VibDevice: Error getting registry entries.");
+		VibLibError("VibDevice: Error getting registry entries.");
 	}
 }
 
@@ -133,12 +145,12 @@ void VibDevice::setUsagePage() {
 		refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDPrimaryUsagePageKey));
 		if (refCF) {
 			if (!CFNumberGetValue((CFNumberRef)refCF, kCFNumberLongType,  &usagePage))
-				printf("VibDevice: Recieving device's usage page.");
+				VibLibError("VibDevice: Recieving device's usage page.");
 			
 			refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDPrimaryUsageKey));
 			
 			if (refCF && !CFNumberGetValue((CFNumberRef)refCF, kCFNumberLongType, &usage))
-				printf("VibDevice: Recieving device's usage.");
+				VibLibError("VibDevice: Recieving device's usage.");
 		}
 		CFRelease(hidProperties);
 	}
@@ -147,14 +159,18 @@ void VibDevice::setUsagePage() {
 void VibDevice::setForceFeedback() {
 	HRESULT ret = FFCreateDevice(ioService, &ffDevice);
 	if (ret != FF_OK) {
-		printf("VibDevice: Unable to create device from service");
+		VibLibError("VibDevice: Unable to create device from service", ret);
 	}
 	
 	//Reset
-	if(!sendCommand(FFSFFC_RESET))
-		printf("VibDevice: Fialed to RESET!");
-	if(!sendCommand(FFSFFC_SETACTUATORSON))
-		printf("VibDevice: Failed to SETACTUATORSON!");
+	ret = FFDeviceSendForceFeedbackCommand(ffDevice, FFSFFC_RESET);
+	if(ret != FF_OK) {
+		VibLibError("VibDevice: Fialed to send command FFSFFC_RESET", ret);
+	}
+	ret = FFDeviceSendForceFeedbackCommand(ffDevice, FFSFFC_SETACTUATORSON);
+	if(ret != FF_OK) {
+		VibLibError("VibDevice: Fialed to FFSFFC_SETACTUATORSON", ret);
+	}
 
 }
 
@@ -162,12 +178,12 @@ void VibDevice::setCapabilities() {
 	FFCAPABILITIES features;
 	HRESULT ret = FFDeviceGetForceFeedbackCapabilities(ffDevice, &features);
 	if (ret != FF_OK) {
-		printf("VibDevice: Unable to get FeedbackCapabilities");
+		VibLibError("VibDevice: Unable to get FeedbackCapabilities", ret);
 	}
 	UInt32 val;
 	ret = FFDeviceGetForceFeedbackProperty(ffDevice, FFPROP_FFGAIN, &val, sizeof(val));
 	if (ret != FF_OK) {
-		printf("VibDevice: Device dos nit support gain");
+		VibLibError("VibDevice: Device dos not support gain", ret);
 	}
 	storageCapacity = features.storageCapacity;
 	playbackCapacity = features.playbackCapacity;

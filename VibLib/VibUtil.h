@@ -22,57 +22,16 @@
  
  */
 
-#ifndef __VibLib__VibDevice__
-#define __VibLib__VibDevice__
+#ifndef VibLib_VibUtil_h
+#define VibLib_VibUtil_h
 
-#include "VibEffect.h"
-
-#include <IOKit/IOKitLib.h>
 #include <ForceFeedback/ForceFeedback.h>
 
-#include <stdio.h>
-#include <map>
-#include <string>
+#define CCONVERT(x)   (((x) > 0x7FFF) ? 10000 : ((x)*10000) / 0x7FFF)
+#define CONVERT(x)    (((x)*10000) / 0x7FFF)
 
-using namespace std;
+const char* ffErrorToString(signed long err);
+void VibLibError(const char* message, signed long err);
+void VibLibError(const char* message);
 
-class VibDevice {
-public:
-	VibDevice(io_service_t ioService);
-	~VibDevice();
-	
-	//IO ref
-	io_service_t ioService;
-	
-	//FF ref
-	FFDeviceObjectReference ffDevice;
-	
-	//Device name
-	char* name;
-	
-	//Usage page
-	long usage;
-	long usagePage;
-	
-	//Capabilities
-	UInt32 storageCapacity;
-	UInt32 playbackCapacity;
-	UInt32 axisCount;
-	UInt8 axes[3];
-	
-	VibEffect* createEffect(string name, const VibEffectData& data);
-	VibEffect* getEffect(string name);
-	void deleteEffect(string name);
-	void deleteEffect(VibEffect* effect);
-	
-private:
-	void setDeviceName();
-	void setUsagePage();
-	void setForceFeedback();
-	void setCapabilities();
-	
-	map<string, VibEffect*> effects;
-};
-
-
-#endif /* defined(__VibLib__VibDevice__) */
+#endif
