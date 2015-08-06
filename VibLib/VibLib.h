@@ -25,9 +25,10 @@
 #ifndef __VibLib__VibLib__
 #define __VibLib__VibLib__
 
+#include "VibDevice.h"
+
 #include <stdio.h>
 #include <vector>
-#include "VibDevice.h"
 
 using namespace std;
 

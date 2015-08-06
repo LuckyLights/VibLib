@@ -24,8 +24,9 @@
 
 #include "VibEffect.h"
 #include "VibDevice.h"
-#include <stdlib.h>
+
 #include <CoreFoundation/CFUUID.h>
+#include <stdlib.h>
 
 CFUUIDRef effectTypeToNative(VibEffectType vibType) {
 	switch (vibType) {

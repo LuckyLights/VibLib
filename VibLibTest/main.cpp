@@ -12,14 +12,16 @@
 int main(void) {
 	
 	VibLib* vibLib = new VibLib();
+	
+	printf("Scaning for devices\n");
 	vibLib->scanDevices();
 	
-	printf("Scaning for deveices\n");
 	int deviceCount = vibLib->getDeviceCount();
 	if(deviceCount > 0) {
+		printf("Found %i devices\n", deviceCount);
 		for (int i = 0; i < deviceCount; ++i) {
 			auto device = vibLib->getDevice(i);
-			printf("Found device: %s\n", device->name);
+			printf("device: %s - %s\n", device->info.name, device->info.serial);
 		}
 		
 		printf("Test 1: Create effect with envelope\n");

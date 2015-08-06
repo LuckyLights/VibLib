@@ -23,11 +23,12 @@
  */
 
 #include "VibLib.h"
+#include "VibUtil.h"
+
 #include <IOKit/IOKitLib.h>
 #include <IOKit/hid/IOHIDKeys.h>
 #include <ForceFeedback/ForceFeedback.h>
 #include <CoreFoundation/CoreFoundation.h>
-#include "VibUtil.h"
 
 VibLib::VibLib() {
 	
@@ -38,6 +39,7 @@ VibLib::~VibLib() {
 }
 
 void VibLib::scanDevices() {
+	vector<VibDevice*> prevDevices(vibDevices);
 	
 	vibDevices.clear();
 	
@@ -60,13 +62,29 @@ void VibLib::scanDevices() {
 	while((ioService = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
 		
 		if (FFIsForceFeedback(ioService) == FF_OK) {
-			vibDevices.push_back(new VibDevice(ioService));
+			const VibDeviceInfo info(ioService);
+			
+			bool found = false;
+			
+			int i = 0;
+			for (auto & iter : prevDevices) {
+				if(info.compare(iter->info)) {
+					found = true;
+					vibDevices.push_back(iter);
+					prevDevices.erase(prevDevices.begin()+i);
+					break;
+				}
+				++i;
+				
+			}
+			if(!found)
+				vibDevices.push_back(new VibDevice(info));
 		} else {
 			IOObjectRelease(ioService);
 		}
 	}
-	
 	IOObjectRelease(iter);
+	prevDevices.clear();
 }
 
 UInt32 VibLib::getDeviceCount() {

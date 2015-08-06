@@ -33,22 +33,31 @@
 #include <stdio.h>
 #include <map>
 #include <string>
-
 using namespace std;
+
+class VibDeviceInfo {
+public:
+	VibDeviceInfo(const io_service_t ioService);
+	
+	bool compare(const VibDeviceInfo& b) const  {
+		return (strcmp(name, b.name) == 0 && strcmp(serial, b.serial) == 0);
+	}
+	
+	const io_service_t ioService;
+	char* name;
+	char* serial;
+};
 
 class VibDevice {
 public:
-	VibDevice(io_service_t ioService);
+	VibDevice(const VibDeviceInfo info);
 	~VibDevice();
 	
-	//IO ref
-	io_service_t ioService;
+	//Info
+	const VibDeviceInfo info;
 	
 	//FF ref
 	FFDeviceObjectReference ffDevice;
-	
-	//Device name
-	char* name;
 	
 	//Usage page
 	long usage;
@@ -66,7 +75,6 @@ public:
 	void deleteEffect(VibEffect* effect);
 	
 private:
-	void setDeviceName();
 	void setUsagePage();
 	void setForceFeedback();
 	void setCapabilities();

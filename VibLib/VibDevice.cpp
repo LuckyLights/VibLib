@@ -23,16 +23,83 @@
  */
 
 #include "VibDevice.h"
+#include "VibUtil.h"
+
 #include <IOKit/hid/IOHIDKeys.h>
 #include <CoreFoundation/CFNumber.h>
 #include <assert.h>
-#include "VibUtil.h"
 
-VibDevice::VibDevice(io_service_t ioService) :
-ioService(ioService),
-name(NULL)
+VibDeviceInfo::VibDeviceInfo(const io_service_t ioService) :
+ioService(ioService)
 {
-	this->setDeviceName();
+	
+	name = new char[256];
+	serial = new char[256];
+	
+	CFMutableDictionaryRef hidProperties, usbProperties;
+	io_registry_entry_t parent1, parent2;
+	kern_return_t ret;
+	
+	hidProperties = usbProperties = 0;
+	
+	ret = IORegistryEntryCreateCFProperties(ioService, &hidProperties,
+											kCFAllocatorDefault, kNilOptions);
+	if ((ret != KERN_SUCCESS) || !hidProperties) {
+		printf("VibDevice: Unable to create CFProperties.");
+	}
+	
+	/* Mac OS X currently is not mirroring all USB properties to HID page so need to look at USB device page also
+	 * get dictionary for usb properties: step up two levels and get CF dictionary for USB properties
+	 */
+	if ((KERN_SUCCESS == IORegistryEntryGetParentEntry(ioService, kIOServicePlane, &parent1)) &&
+		(KERN_SUCCESS == IORegistryEntryGetParentEntry(parent1, kIOServicePlane, &parent2)) &&
+		(KERN_SUCCESS == IORegistryEntryCreateCFProperties(parent2, &usbProperties, kCFAllocatorDefault, kNilOptions))) {
+		if (usbProperties) {
+			CFTypeRef refCF = 0;
+			/* get device info
+			 * try hid dictionary first, if fail then go to usb dictionary
+			 */
+			
+			/* Get product name */
+			refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDProductKey));
+			if (!refCF) {
+				refCF = CFDictionaryGetValue(usbProperties, CFSTR("USB Product Name"));
+			}
+			
+			if (refCF) {
+				if (!CFStringGetCString((CFStringRef)refCF, name, 256, CFStringGetSystemEncoding())) {
+					VibLibError("VibDevice: CFStringGetCString error retrieving product.");
+				}
+			}
+			
+			refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDSerialNumberKey));
+			if (refCF) {
+				if (!CFStringGetCString((CFStringRef)refCF, serial, 256, CFStringGetSystemEncoding())) {
+					VibLibError("VibDevice: CFStringGetCString error retrieving serial.");
+				}
+			}
+			
+			CFRelease(usbProperties);
+		} else {
+			VibLibError("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
+		}
+		
+		/* Release stuff. */
+		if (kIOReturnSuccess != IOObjectRelease(parent2)) {
+			VibLibError("VibDevice: IOObjectRelease error with parent2.");
+		}
+		if (kIOReturnSuccess != IOObjectRelease(parent1)) {
+			VibLibError("VibDevice: IOObjectRelease error with parent1.");
+		}
+	} else {
+		VibLibError("VibDevice: Error getting registry entries.");
+	}
+	
+}
+
+VibDevice::VibDevice(const VibDeviceInfo info) :
+info(info)
+{
 	this->setUsagePage();
 	this->setForceFeedback();
 	this->setCapabilities();
@@ -43,9 +110,6 @@ VibDevice::~VibDevice() {
 		delete iter->second;
 	}
 	effects.clear();
-	
-	if(name != NULL)
-		delete name;
 }
 
 VibEffect* VibDevice::createEffect(const string name, const VibEffectData& data) {
@@ -78,68 +142,10 @@ void VibDevice::deleteEffect(VibEffect* effect) {
 	}
 }
 
-void VibDevice::setDeviceName() {
-	name = new char[256];
-	
-	CFMutableDictionaryRef hidProperties, usbProperties;
-	io_registry_entry_t parent1, parent2;
-	kern_return_t ret;
-	
-	hidProperties = usbProperties = 0;
-	
-	ret = IORegistryEntryCreateCFProperties(ioService, &hidProperties,
-											kCFAllocatorDefault, kNilOptions);
-	if ((ret != KERN_SUCCESS) || !hidProperties) {
-		 printf("VibDevice: Unable to create CFProperties.");
-	}
-	
-	/* Mac OS X currently is not mirroring all USB properties to HID page so need to look at USB device page also
-	 * get dictionary for usb properties: step up two levels and get CF dictionary for USB properties
-	 */
-	if ((KERN_SUCCESS == IORegistryEntryGetParentEntry(ioService, kIOServicePlane, &parent1)) &&
-		(KERN_SUCCESS == IORegistryEntryGetParentEntry(parent1, kIOServicePlane, &parent2)) &&
-		(KERN_SUCCESS == IORegistryEntryCreateCFProperties(parent2, &usbProperties, kCFAllocatorDefault, kNilOptions))) {
-		if (usbProperties) {
-			CFTypeRef refCF = 0;
-			/* get device info
-			 * try hid dictionary first, if fail then go to usb dictionary
-			 */
-			
-			/* Get product name */
-			refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDProductKey));
-			if (!refCF) {
-				refCF = CFDictionaryGetValue(usbProperties, CFSTR("USB Product Name"));
-			}
-			
-			
-			if (refCF) {
-				if (!CFStringGetCString((CFStringRef)refCF, name, 256, CFStringGetSystemEncoding())) {
-					VibLibError("VibDevice: CFStringGetCString error retrieving pDevice->product.");
-				}
-			}
-			
-			CFRelease(usbProperties);
-		} else {
-			VibLibError("VibDevice: IORegistryEntryCreateCFProperties failed to create usbProperties.");
-		}
-		
-		/* Release stuff. */
-		if (kIOReturnSuccess != IOObjectRelease(parent2)) {
-			VibLibError("VibDevice: IOObjectRelease error with parent2.");
-		}
-		if (kIOReturnSuccess != IOObjectRelease(parent1)) {
-			VibLibError("VibDevice: IOObjectRelease error with parent1.");
-		}
-	} else {
-		VibLibError("VibDevice: Error getting registry entries.");
-	}
-}
-
-
 void VibDevice::setUsagePage() {
 	CFMutableDictionaryRef hidProperties = 0;
 	CFTypeRef refCF = 0;
-	IOReturn result = IORegistryEntryCreateCFProperties(ioService, &hidProperties, kCFAllocatorDefault, kNilOptions);
+	IOReturn result = IORegistryEntryCreateCFProperties(info.ioService, &hidProperties, kCFAllocatorDefault, kNilOptions);
 	
 	if ((result == KERN_SUCCESS) && hidProperties) {
 		refCF = CFDictionaryGetValue(hidProperties, CFSTR(kIOHIDPrimaryUsagePageKey));
@@ -157,7 +163,7 @@ void VibDevice::setUsagePage() {
 }
 
 void VibDevice::setForceFeedback() {
-	HRESULT ret = FFCreateDevice(ioService, &ffDevice);
+	HRESULT ret = FFCreateDevice(info.ioService, &ffDevice);
 	if (ret != FF_OK) {
 		VibLibError("VibDevice: Unable to create device from service", ret);
 	}
