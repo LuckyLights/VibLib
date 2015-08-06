@@ -8,7 +8,7 @@ VibLib is a OSX framework for vibrations and force-feedback manipulations on gam
 * Support unplugging of device while running
 
 #### 0.4 (Current)
-* Rescan devices and keeping the current
+* Rescan devices
 * Update licences to zlib
 * Reading serial number of devices
 
