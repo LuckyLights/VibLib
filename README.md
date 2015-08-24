@@ -2,8 +2,6 @@
 VibLib is a OSX framework for vibrations and force-feedback manipulations on game controllers.
 
 ## Roadmap
-
-#### TODO
 * More effect types and options available from the Unity API
 * Better more visual effect editor in Unity
 * Documention
