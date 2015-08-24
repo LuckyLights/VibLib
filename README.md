@@ -28,3 +28,6 @@ VibLib is a OSX framework for vibrations and force-feedback manipulations on gam
 
 #### 0.1
 * Init version
+
+## Credits
+Some of the source code was inspired or copied and then modified from the SLD2 darwin haptic port.
