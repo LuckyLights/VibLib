@@ -19,6 +19,16 @@
 		041F6D801B62E7E700E9A804 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
 		041F6D811B62E7F200E9A804 /* VibLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D591B62E70F00E9A804 /* VibLib.framework */; };
 		045F0FF91B6FC40F004327FC /* VibUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045F0FF81B6FC40F004327FC /* VibUtil.cpp */; };
+		049007641B79C97000B156EF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049007631B79C97000B156EF /* Info.plist */; };
+		04F48AC61B79C9AA00CC9053 /* VibLibUnity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F48AC51B79C9AA00CC9053 /* VibLibUnity.cpp */; };
+		04F48AC71B79C9BB00CC9053 /* VibDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D2F1B62E63E00E9A804 /* VibDevice.cpp */; };
+		04F48AC81B79C9BB00CC9053 /* VibEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D311B62E63E00E9A804 /* VibEffect.cpp */; };
+		04F48AC91B79C9BB00CC9053 /* VibLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041F6D331B62E63E00E9A804 /* VibLib.cpp */; };
+		04F48ACA1B79C9BB00CC9053 /* VibUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045F0FF81B6FC40F004327FC /* VibUtil.cpp */; };
+		04F48ACB1B79C9DC00CC9053 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3F1B62E67300E9A804 /* IOKit.framework */; };
+		04F48ACC1B79C9DC00CC9053 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3D1B62E66400E9A804 /* ForceFeedback.framework */; };
+		04F48ACD1B79C9DC00CC9053 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */; };
+		04F48ACF1B79CA0A00CC9053 /* VibLibUnity.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0490075C1B79C95400B156EF /* VibLibUnity.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +52,16 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		04F48ACE1B79CA0200CC9053 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SRCROOT)/VibLibUnityTest/Assets/VibLib/Plugin/x86_64";
+			dstSubfolderSpec = 0;
+			files = (
+				04F48ACF1B79CA0A00CC9053 /* VibLibUnity.bundle in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +79,9 @@
 		041F6D591B62E70F00E9A804 /* VibLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VibLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		045F0FF71B6FC1E0004327FC /* VibUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VibUtil.h; sourceTree = "<group>"; };
 		045F0FF81B6FC40F004327FC /* VibUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VibUtil.cpp; sourceTree = "<group>"; };
+		0490075C1B79C95400B156EF /* VibLibUnity.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VibLibUnity.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		049007631B79C97000B156EF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04F48AC51B79C9AA00CC9053 /* VibLibUnity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VibLibUnity.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +103,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		049007591B79C95400B156EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04F48ACB1B79C9DC00CC9053 /* IOKit.framework in Frameworks */,
+				04F48ACC1B79C9DC00CC9053 /* ForceFeedback.framework in Frameworks */,
+				04F48ACD1B79C9DC00CC9053 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -88,6 +121,7 @@
 			children = (
 				041F6D411B62E67D00E9A804 /* Frameworks */,
 				041F6D2E1B62E63E00E9A804 /* VibLib */,
+				0490075D1B79C95400B156EF /* VibLibUnity */,
 				041F6D351B62E63E00E9A804 /* VibLibTest */,
 				041F6D1E1B62E56500E9A804 /* Products */,
 			);
@@ -98,6 +132,7 @@
 			children = (
 				041F6D491B62E6BE00E9A804 /* VibLibTest */,
 				041F6D591B62E70F00E9A804 /* VibLib.framework */,
+				0490075C1B79C95400B156EF /* VibLibUnity.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,6 +168,23 @@
 				041F6D3B1B62E65E00E9A804 /* CoreFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0490075D1B79C95400B156EF /* VibLibUnity */ = {
+			isa = PBXGroup;
+			children = (
+				0490075E1B79C95400B156EF /* Supporting Files */,
+				04F48AC51B79C9AA00CC9053 /* VibLibUnity.cpp */,
+			);
+			path = VibLibUnity;
+			sourceTree = "<group>";
+		};
+		0490075E1B79C95400B156EF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				049007631B79C97000B156EF /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +239,24 @@
 			productReference = 041F6D591B62E70F00E9A804 /* VibLib.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		0490075B1B79C95400B156EF /* VibLibUnity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 049007601B79C95400B156EF /* Build configuration list for PBXNativeTarget "VibLibUnity" */;
+			buildPhases = (
+				049007581B79C95400B156EF /* Sources */,
+				049007591B79C95400B156EF /* Frameworks */,
+				0490075A1B79C95400B156EF /* Resources */,
+				04F48ACE1B79CA0200CC9053 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VibLibUnity;
+			productName = VibLibUnity;
+			productReference = 0490075C1B79C95400B156EF /* VibLibUnity.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -200,6 +270,9 @@
 						CreatedOnToolsVersion = 6.4;
 					};
 					041F6D581B62E70F00E9A804 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					0490075B1B79C95400B156EF = {
 						CreatedOnToolsVersion = 6.4;
 					};
 				};
@@ -218,6 +291,7 @@
 			targets = (
 				041F6D481B62E6BE00E9A804 /* VibLibTest */,
 				041F6D581B62E70F00E9A804 /* VibLib */,
+				0490075B1B79C95400B156EF /* VibLibUnity */,
 			);
 		};
 /* End PBXProject section */
@@ -227,6 +301,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0490075A1B79C95400B156EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				049007641B79C97000B156EF /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +331,18 @@
 				041F6D771B62E77500E9A804 /* VibLib.cpp in Sources */,
 				041F6D751B62E77500E9A804 /* VibDevice.cpp in Sources */,
 				045F0FF91B6FC40F004327FC /* VibUtil.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		049007581B79C95400B156EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04F48AC61B79C9AA00CC9053 /* VibLibUnity.cpp in Sources */,
+				04F48AC81B79C9BB00CC9053 /* VibEffect.cpp in Sources */,
+				04F48AC71B79C9BB00CC9053 /* VibDevice.cpp in Sources */,
+				04F48ACA1B79C9BB00CC9053 /* VibUtil.cpp in Sources */,
+				04F48AC91B79C9BB00CC9053 /* VibLib.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +496,34 @@
 			};
 			name = Release;
 		};
+		049007611B79C95400B156EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = VibLibUnity/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		049007621B79C95400B156EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = VibLibUnity/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -428,6 +550,15 @@
 			buildConfigurations = (
 				041F6D6D1B62E70F00E9A804 /* Debug */,
 				041F6D6E1B62E70F00E9A804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		049007601B79C95400B156EF /* Build configuration list for PBXNativeTarget "VibLibUnity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				049007611B79C95400B156EF /* Debug */,
+				049007621B79C95400B156EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

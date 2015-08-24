@@ -9,7 +9,34 @@
 #include <stdio.h>
 #include "vibLib/VibLib.h"
 
-int main(void) {
+#define STD_RUMBLE "std_rumble"
+
+VibLib* vibLib;
+int main() {
+	vibLib = new VibLib();
+	vibLib->scanDevices();
+	
+	VibEffectData rumbleData = VibEffectData();
+	rumbleData.periodic.period = 1000;
+	rumbleData.periodic.magnitude = 10000;
+	rumbleData.effect.duration = 2000;
+	
+	rumbleData.envelope.attackTime = 500;
+	rumbleData.envelope.attackLevel = 0;
+	
+	rumbleData.envelope.fadeTime = 1500;
+	rumbleData.envelope.fadeLevel = 0;
+	
+	for (int i = 0; i < vibLib->getDeviceCount(); ++i) {
+		auto device = vibLib->getDevice(i);
+		auto effect = device->createEffect("vibrate", rumbleData);
+		effect->start();
+	}
+	
+	sleep(2);
+}
+
+int main2(void) {
 	
 	VibLib* vibLib = new VibLib();
 	
@@ -109,4 +136,6 @@ int main(void) {
 	printf("Test done");
 	
 	delete vibLib;
+	
+	return 0;
 }
